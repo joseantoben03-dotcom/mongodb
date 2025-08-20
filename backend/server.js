@@ -109,4 +109,17 @@ app.listen(PORT, () =>
 app.get("/", (req, res) => {
   res.send("🎓 Student Management API is running...");
 });
+// CREATE - Add new student
+app.post("/students", async (req, res) => {
+  try {
+    req.body.rollNo = Number(req.body.rollNo); // Ensure numbers
+    req.body.marks = Number(req.body.marks);
+
+    const student = new Student(req.body);
+    await student.save();
+    res.status(201).json({ message: "✅ Student added successfully!", student });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
